@@ -40,6 +40,7 @@ const BankCard = ({account, userName, showBalance = true}:CreditCardProps) => {
                width={20}
                height={24}
                alt='pay'
+             
             />
             <Image 
                src="/icons/mastercard.svg"
