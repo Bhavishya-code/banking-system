@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 
+import { Control } from "react-hook-form";
+
 declare type SearchParamProps = {
   params: { [key: string]: string };
   searchParams: { [key: string]: string | string[] | undefined };
@@ -8,14 +10,14 @@ declare type SearchParamProps = {
 // ========================================
 
 declare type SignUpParams = {
-  firstName: string;
-  lastName: string;
-  address1: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  dateOfBirth: string;
-  ssn: string;
+  firstName?: string;
+  lastName?: string;
+  address1?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  dateOfBirth?: string;
+  phone?: string;
   email: string;
   password: string;
 };
@@ -33,6 +35,7 @@ declare type User = {
   dwollaCustomerId: string;
   firstName: string;
   lastName: string;
+  name: string;
   address1: string;
   city: string;
   state: string;
@@ -210,6 +213,7 @@ declare interface TotlaBalanceBoxProps {
 
 declare interface FooterProps {
   user: User;
+  type?: "mobile" | "desktop";
 }
 
 declare interface RightSidebarProps {
@@ -326,8 +330,9 @@ declare interface getBankProps {
 declare interface getBankByAccountIdProps {
   accountId: string;
 }
+
 declare interface CustomInputProps {
-  form: any; 
+  control:  Control<z.infer<typeof formSchema>>; 
   name: string;
   label: string;
   placeholder?: string;

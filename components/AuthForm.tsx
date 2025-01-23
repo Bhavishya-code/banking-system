@@ -26,12 +26,14 @@ import CustomInput from './CustomInput';
 import { authFormSchema } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 
+import { getLoggedInUser, signIn, signUp  } from '@/lib/actions/user.actions';
 
 
 const AuthForm = ({ type}: {type: string}) => {
     const router = useRouter();
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    
     const formSchema = authFormSchema(type);
         // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
@@ -43,21 +45,34 @@ const AuthForm = ({ type}: {type: string}) => {
         },
     })
     // 2. Define a submit handler.
-    const onSubmit = (data: z.infer<typeof formSchema>) =>{
+    const onSubmit = async (data: z.infer<typeof formSchema>) =>{
       
         setIsLoading(true)
         try{
-         // Sign up with Appwrite and create plain Link token
+         
          if(type=== 'sign-up'){
-          //  const newUser = await signUp(data);
-          //  setUser(newUser);
+          const userData = {
+            firstName: data.firstName!,
+            lastName: data.lastName!,
+            address1: data.address1!,
+            city: data.city!,
+            state: data.state!,
+            postalCode: data.postalCode!,
+            dateOfBirth: data.dateOfBirth!,
+            phone: data!,
+            email: data.email,
+            password: data.password
+          }
+           const newUser = await signUp(data)
+           setUser(newUser);
+           router.push("/"); 
          }
          if(type=='sign-in'){
-          // const response = await SignIn({
-          //   email: data.email,
-          //   password: data.password,
-          // })
-          // if(response) router.push('/')
+          const response = await signIn({
+            email: data.email,
+            password: data.password,
+          })
+          if(response) router.push('/');
 
          }
         } catch(error){
@@ -91,7 +106,7 @@ const AuthForm = ({ type}: {type: string}) => {
                         ? 'Sign In'
                         : 'Sign Up'
                     }
-                </h1>
+               
                 <p className='text-16 font-normal text-gray-600'>
                     {user
                        ? 'Link your account to get started'
@@ -99,6 +114,7 @@ const AuthForm = ({ type}: {type: string}) => {
                     }
 
                 </p>
+                </h1>
              </div>
         
         </header> 
@@ -114,14 +130,14 @@ const AuthForm = ({ type}: {type: string}) => {
                        <>
                        <div className='flex gap-4'>
                          <CustomInput 
-                        form = {form}
+                         control = {form.control}
                         name = 'firstName' 
                         label = 'First Name' 
                         placeholder = 'ex: Bhavishya'
                         
                         />
                          <CustomInput 
-                        form = {form}
+                        control = {form.control}
                         name = 'lastName' 
                         label = 'Last Name' 
                         placeholder = 'ex: Sangwan'
@@ -129,14 +145,14 @@ const AuthForm = ({ type}: {type: string}) => {
                         />
                         </div>
                          <CustomInput 
-                        form = {form}
-                        name = 'address' 
+                        control = {form.control}
+                        name = 'address1' 
                         label = 'Address' 
                         placeholder = 'Enter your specific address'
                         
                         />
                          <CustomInput 
-                        form = {form}
+                        control = {form.control}
                         name = 'city' 
                         label = 'City' 
                         placeholder = 'Enter your city'
@@ -144,13 +160,13 @@ const AuthForm = ({ type}: {type: string}) => {
                         />
                         <div className='flex gap-4'>
                          <CustomInput 
-                        form = {form}
+                        control = {form.control}
                         name = 'state' 
                         label = 'State' 
                         placeholder = 'ex: Haryana'
                         />
                          <CustomInput 
-                        form = {form}
+                        control = {form.control}
                         name = 'postalCode' 
                         label = 'Postal Code' 
                         placeholder = 'ex: 113318'
@@ -158,14 +174,14 @@ const AuthForm = ({ type}: {type: string}) => {
                         </div>
                         <div className='flex gap-4'>
                         <CustomInput 
-                        form = {form}
+                        control = {form.control}
                         name = 'dateOfBirth' 
                         label = 'Date of Birth' 
                         placeholder = 'yyyy-mm-dd'
                         
                         />
                          <CustomInput 
-                        form = {form}
+                        control = {form.control}
                         name = 'phone' 
                         label = 'Phone No.' 
                         placeholder = 'ex: 98XXXXXXXX'
@@ -177,14 +193,14 @@ const AuthForm = ({ type}: {type: string}) => {
                        
                        </> }
                         <CustomInput 
-                        form = {form}
-                        name = 'Email' 
+                        control = {form.control}
+                        name = 'email' 
                         label = 'Email' 
                         placeholder = 'Enter your email'
                         
                         />
                         <CustomInput 
-                        form = {form}
+                        control = {form.control}
                         name = 'password' 
                         label = 'Password' 
                         placeholder = 'Enter your password'
@@ -224,3 +240,5 @@ const AuthForm = ({ type}: {type: string}) => {
 
 }
 export default AuthForm
+
+

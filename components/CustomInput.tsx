@@ -2,18 +2,27 @@
 import React, { useState } from 'react'
 import { FormField, FormLabel, FormControl, FormMessage } from './ui/form'
 import { Input } from './ui/input'
-import { authFormSchema } from '@/lib/utils'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+
+import { Control } from 'react-hook-form'
 import { z } from 'zod'
+import { authFormSchema} from '@/lib/utils'
+
+const formSchema = authFormSchema('sign-up')
+interface CustomInputProps {
+  control: Control<z.infer<typeof formSchema>>;
+  name: keyof z.infer<typeof formSchema>;
+  label: string;
+  placeholder?: string;
+  
+}
 
 
-const CustomInput = ({form ,name ,label,placeholder}:CustomInputProps) => {
+const CustomInput = ({control, name ,label,placeholder}:CustomInputProps) => {
 
   
   return (
     <FormField
-    control={form.control}
+    control={control}
     name={name}
     render={({ field }) => (
         <div className='form-item'>
