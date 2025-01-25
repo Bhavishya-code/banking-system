@@ -27,6 +27,7 @@ import { authFormSchema } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
 
 import { getLoggedInUser, signIn, signUp  } from '@/lib/actions/user.actions';
+import PlaidLink from './PlaidLink';
 
 
 const AuthForm = ({ type}: {type: string}) => {
@@ -59,11 +60,11 @@ const AuthForm = ({ type}: {type: string}) => {
             state: data.state!,
             postalCode: data.postalCode!,
             dateOfBirth: data.dateOfBirth!,
-            phone: data!,
+            phone: data.phone!,
             email: data.email,
             password: data.password
           }
-           const newUser = await signUp(data)
+           const newUser = await signUp(userData);
            setUser(newUser);
            router.push("/"); 
          }
@@ -120,9 +121,9 @@ const AuthForm = ({ type}: {type: string}) => {
         </header> 
         {user ?(
           <div className="flex flex-col gap-4">
-            {/* PlaidLink */}
+            <PlaidLink user={user} variant="primary"/>
           </div>
-        ):(
+         ):( 
             <>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -152,10 +153,10 @@ const AuthForm = ({ type}: {type: string}) => {
                         
                         />
                          <CustomInput 
-                        control = {form.control}
-                        name = 'city' 
-                        label = 'City' 
-                        placeholder = 'Enter your city'
+                            control = {form.control}
+                            name = 'city' 
+                            label = 'City' 
+                            placeholder = 'Enter your city'
                         
                         />
                         <div className='flex gap-4'>
@@ -233,8 +234,8 @@ const AuthForm = ({ type}: {type: string}) => {
                   </footer>
               
             </>
-        )
-        }
+         )
+        } 
     </section>
   )
 
